@@ -21,6 +21,6 @@ class board:
             self.board.append(['BR','BN','BB','BK','BQ','BB','BN','BR'])
 
 
-b=board("BLACK")
-for row in b.board:
-    print(row)
+# b=board("BLACK")
+# for row in b.board:
+#     print(row)
