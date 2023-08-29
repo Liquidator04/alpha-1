@@ -1,0 +1,2 @@
+class piece:
+    pass
