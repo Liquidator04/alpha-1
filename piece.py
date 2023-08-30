@@ -1,6 +1,30 @@
 from abc import ABC, abstractmethod
 
 class Piece(ABC):
+    # takes a board object b and a color c (W/B), and returns if king of color c is under check in board b
+    def check(self, b, c):
+        board = b.board
+        ans = False
+        for i in range(0, 8):
+            for j in range(0, 8):
+                piece = board[i][j]
+                if type(piece)==type("") and not piece.startswith(c):
+                    d={'N':knight, 'B':bishop, 'P':pawn, 'R':rook, 'Q':queen, 'K':king}
+                    piece_type = d[piece[1]]
+                    piece_color = piece[0]
+                    legal_moves = piece_type().set_legal_moves(i, j, b, piece_color)
+                    for move in legal_moves:
+                        row, col = move[0], move[1]
+                        target = board[row][col]
+                        if type(target)==type("") and target[0]==c and target[1]=='K':
+                            ans = True 
+                            break 
+                    if ans:
+                        break 
+            if ans:
+                break
+        return ans
+
     @abstractmethod
     def set_legal_moves(i,j):
         pass
