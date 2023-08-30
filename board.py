@@ -1,7 +1,9 @@
 class board:
     board=[]
+    color=""
     def __init__(self,color):
-        if color=="WHITE":
+        self.color=color
+        if color=="W":
             self.board.append(['BR','BN','BB','BQ','BK','BB','BN','BR'])
             li=['BP' for _ in range(0,8)]
             self.board.append(li)

@@ -1,8 +1,8 @@
 import pygame
 from board import board
-from piece import knight
+from piece import *
 # FRONT END FILE
-b=board("WHITE")
+b=board("W")
 board=[]
 # print(b.board)
 # pygame setup
@@ -17,6 +17,7 @@ TurnChecker=1
 def get_board():
     return b.board
 
+# takes a legal set of moves and changes those tiles on the board from 0 to 1 or from WN to WN1
 def update_board(moves):
     for move in moves:
         if b.board[move[0]][move[1]]==0:
@@ -24,13 +25,14 @@ def update_board(moves):
         else:
             b.board[move[0]][move[1]]=b.board[move[0]][move[1]]+"1"
 
+# removes the trailing 1 from any tiles on the board (which represents a legal move)
 def reset_board():
     for i in range(0,8):
         for j in range(0,8):
             if b.board[i][j]==1:
                 b.board[i][j]=0
             if type(b.board[i][j])==type("") and b.board[i][j].endswith('1'):
-                b.board[i][j]=b.board[i][j][0:2]
+                b.board[i][j]=b.board[i][j][:-1]
 
 piece_selected=''
 piece_selected_location=(-1,-1)
@@ -67,18 +69,38 @@ while running:
                 piece_selected='WN'
                 piece_selected_location=(i,j)
                 reset_board()
-                moves=knight().set_legal_moves(i,j,b.board,'W')
+                moves=knight().set_legal_moves(i,j,b,'W')
                 update_board(moves)
-                for row in b.board:
-                    print(row)
             if b.board[i][j]=='BN' and TurnChecker==-1:
                 piece_selected='BN'
                 piece_selected_location=(i,j)
                 reset_board()
-                moves=knight().set_legal_moves(i,j,b.board,'B')
+                moves=knight().set_legal_moves(i,j,b,'B')
                 update_board(moves)
-                for row in b.board:
-                    print(row)
+            if b.board[i][j]=='WB' and TurnChecker==1:
+                piece_selected='WB'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=bishop().set_legal_moves(i,j,b,'W')
+                update_board(moves)
+            if b.board[i][j]=='BB' and TurnChecker==-1:
+                piece_selected='BB'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=bishop().set_legal_moves(i,j,b,'B')
+                update_board(moves)
+            if b.board[i][j]=='WP' and TurnChecker==1:
+                piece_selected='WP'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=pawn().set_legal_moves(i,j,b,'W')
+                update_board(moves)
+            if b.board[i][j]=='BP' and TurnChecker==-1:
+                piece_selected='BP'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=pawn().set_legal_moves(i,j,b,'B')
+                update_board(moves)
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
