@@ -22,13 +22,16 @@ def update_board(moves):
         if b.board[move[0]][move[1]]==0:
             b.board[move[0]][move[1]]=1
         else:
-            b.board[move[0]][move[1]]=[b.board[move[0]][move[1]],1]
+            b.board[move[0]][move[1]]=b.board[move[0]][move[1]]+"1"
 
 def reset_board():
     for i in range(0,8):
         for j in range(0,8):
             if b.board[i][j]==1:
                 b.board[i][j]=0
+            if type(b.board[i][j])==type("") and b.board[i][j].endswith('1'):
+                b.board[i][j]=b.board[i][j][0:2]
+
 piece_selected=''
 piece_selected_location=(-1,-1)
 while running:
@@ -38,12 +41,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type==pygame.MOUSEBUTTONUP:
-            print("Entered moust button up")
             pos=pygame.mouse.get_pos()
             i=int(pos[1]/60)
             j=int(pos[0]/60)
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
+                b.board[i][j]=piece_selected
+                b.board[piece_selected_location[0]][piece_selected_location[1]]=0
+                TurnChecker*=-1
+                reset_board()
+                piece_selected=''
+                piece_selected_location=(-1,-1)
+            if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
@@ -68,6 +77,8 @@ while running:
                 reset_board()
                 moves=knight().set_legal_moves(i,j,b.board,'B')
                 update_board(moves)
+                for row in b.board:
+                    print(row)
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
@@ -91,65 +102,59 @@ while running:
         for j in range(0,8):
             checker=False
             checker_legal=False
-            checker_capturing=False
-            if type(b.board[j][i])==type(list()):
-                checker_capturing=True
-                capturing_location=(j,i)
-                b.board[j][i]=b.board[j][i][0]
-            if capturing_location!=(-1,-1):
-                print("Entered if")
-                checker_capturing=True
-            if b.board[j][i]=='WP':
-                # print("i=",i)
-                # print("j=",j) 
-                piece=pygame.image.load('Images/white pawn.png')
-                checker=True
-            if b.board[j][i]=='WR':
-                piece=pygame.image.load('Images/white rook.png')
-                checker=True
-            if b.board[j][i]=='WN':
-                piece=pygame.image.load('Images/white knight.png')
-                checker=True
-            if b.board[j][i]=='WB':
-                piece=pygame.image.load('Images/white bishop.png')
-                checker=True
-            if b.board[j][i]=='WQ':
-                piece=pygame.image.load('Images/white queen.png')
-                checker=True
-            if b.board[j][i]=='WK':
-                piece=pygame.image.load('Images/white king.png')
-                checker=True
-            if b.board[j][i]=='BP':
-                piece=pygame.image.load('Images/black pawn.png')
-                checker=True
-            if b.board[j][i]=='BN':
-                piece=pygame.image.load('Images/black knight.png')
-                checker=True
-            if b.board[j][i]=='BR':
-                piece=pygame.image.load('Images/black rook.png')
-                checker=True
-            if b.board[j][i]=='BB':
-                piece=pygame.image.load('Images/black bishop.png')
-                checker=True
-            if b.board[j][i]=='BQ':
-                piece=pygame.image.load('Images/black queen.png')
-                checker=True
-            if b.board[j][i]=='BK':
-                piece=pygame.image.load('Images/black king.png')
-                checker=True
-            if b.board[j][i]==1:
-                piece=pygame.image.load('Images/legal moves.png')
-                checker_legal=True
-            if checker:
-                piece = pygame.transform.scale(piece,(60,60))
-                screen.blit(piece,(i*60,j*60))
-            if checker_legal:
-                piece = pygame.transform.scale(piece,(30,30))
-                screen.blit(piece,(i*60+15,j*60+15))
-            if checker_capturing:
-                piece=pygame.image.load('Images/legal moves.png')
-                piece = pygame.transform.scale(piece,(30,30))
-                screen.blit(piece,(capturing_location[0]*60+15,capturing_location[1]*60+15))
+            if type(b.board[j][i])==type(5):
+                if b.board[j][i]==1:
+                    piece=pygame.image.load('Images/legal moves.png')
+                    checker_legal=True
+                    piece = pygame.transform.scale(piece,(30,30))
+                    screen.blit(piece,(i*60+15,j*60+15))
+            elif type(b.board[j][i])==type(""):
+                if b.board[j][i].startswith('WP'):
+                    # print("i=",i)
+                    # print("j=",j) 
+                    piece=pygame.image.load('Images/white pawn.png')
+                    checker=True
+                if b.board[j][i].startswith('WR'):
+                    piece=pygame.image.load('Images/white rook.png')
+                    checker=True
+                if b.board[j][i].startswith('WN'):
+                    piece=pygame.image.load('Images/white knight.png')
+                    checker=True
+                if b.board[j][i].startswith('WB'):
+                    piece=pygame.image.load('Images/white bishop.png')
+                    checker=True
+                if b.board[j][i].startswith('WQ'):
+                    piece=pygame.image.load('Images/white queen.png')
+                    checker=True
+                if b.board[j][i].startswith('WK'):
+                    piece=pygame.image.load('Images/white king.png')
+                    checker=True
+                if b.board[j][i].startswith('BP'):
+                    piece=pygame.image.load('Images/black pawn.png')
+                    checker=True
+                if b.board[j][i].startswith('BN'):
+                    piece=pygame.image.load('Images/black knight.png')
+                    checker=True
+                if b.board[j][i].startswith('BR'):
+                    piece=pygame.image.load('Images/black rook.png')
+                    checker=True
+                if b.board[j][i].startswith('BB'):
+                    piece=pygame.image.load('Images/black bishop.png')
+                    checker=True
+                if b.board[j][i].startswith('BQ'):
+                    piece=pygame.image.load('Images/black queen.png')
+                    checker=True
+                if b.board[j][i].startswith('BK'):
+                    piece=pygame.image.load('Images/black king.png')
+                    checker=True
+                if checker:
+                    piece = pygame.transform.scale(piece,(60,60))
+                    screen.blit(piece,(i*60,j*60))
+                if b.board[j][i].endswith('1'):
+                    piece=pygame.image.load('Images/legal moves.png')
+                    piece = pygame.transform.scale(piece,(30,30))
+                    screen.blit(piece,(i*60+15,j*60+15))
+
     # flip() the display to put your work on screen
     pygame.display.flip()
 
