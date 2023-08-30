@@ -86,3 +86,58 @@ class pawn(Piece):
                 if j+1<8 and type(board[i+1][j+1])==type("") and not board[i+1][j+1].startswith(color):
                     moves.append([i+1, j+1])      
         return moves
+    
+class rook(Piece):
+    def set_legal_moves(self, i, j, b, color):
+        board=b.board
+        moves=[]
+        # above
+        a,b=i-1,j
+        while(a>=0 and board[a][b]==0):
+            moves.append([a,b])
+            a-=1
+        else:
+            if a>=0 and type(board[a][b])==type("") and not board[a][b].startswith(color):
+                moves.append([a,b])
+        # below
+        a,b=i+1,j
+        while(a<8 and board[a][b]==0):
+            moves.append([a,b])
+            a+=1
+        else:
+            if a<8 and type(board[a][b])==type("") and not board[a][b].startswith(color):
+                moves.append([a,b])
+        # left
+        a,b=i,j-1
+        while(b>=0 and board[a][b]==0):
+            moves.append([a,b])
+            b-=1
+        else:
+            if b>=0 and type(board[a][b])==type("") and not board[a][b].startswith(color):
+                moves.append([a,b])
+        # right
+        a,b=i,j+1
+        while(b<8 and board[a][b]==0):
+            moves.append([a,b])
+            b+=1
+        else:
+            if b<8 and type(board[a][b])==type("") and not board[a][b].startswith(color):
+                moves.append([a,b])
+        return moves
+    
+class queen(Piece):
+    def set_legal_moves(self, i, j, b, color):
+        board=b.board
+        moves=bishop().set_legal_moves(i,j,b,color)+rook().set_legal_moves(i,j,b,color)
+        return moves
+
+class king(Piece):
+    def set_legal_moves(self, i, j, b, color):
+        board=b.board
+        moves=[[i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1], [i-1, j-1]]
+        legal_moves=[]
+        for move in moves:
+            row, col = move[0], move[1]
+            if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not board[row][col].startswith(color)):
+                legal_moves.append(move)
+        return legal_moves

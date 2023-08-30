@@ -101,6 +101,42 @@ while running:
                 reset_board()
                 moves=pawn().set_legal_moves(i,j,b,'B')
                 update_board(moves)
+            if b.board[i][j]=='WR' and TurnChecker==1:
+                piece_selected='WR'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=rook().set_legal_moves(i,j,b,'W')
+                update_board(moves)
+            if b.board[i][j]=='BR' and TurnChecker==-1:
+                piece_selected='BR'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=rook().set_legal_moves(i,j,b,'B')
+                update_board(moves)
+            if b.board[i][j]=='WQ' and TurnChecker==1:
+                piece_selected='WQ'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=queen().set_legal_moves(i,j,b,'W')
+                update_board(moves)
+            if b.board[i][j]=='BQ' and TurnChecker==-1:
+                piece_selected='BQ'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=queen().set_legal_moves(i,j,b,'B')
+                update_board(moves)
+            if b.board[i][j]=='WK' and TurnChecker==1:
+                piece_selected='WK'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=king().set_legal_moves(i,j,b,'W')
+                update_board(moves)
+            if b.board[i][j]=='BK' and TurnChecker==-1:
+                piece_selected='BK'
+                piece_selected_location=(i,j)
+                reset_board()
+                moves=king().set_legal_moves(i,j,b,'B')
+                update_board(moves)
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
