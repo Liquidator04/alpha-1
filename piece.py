@@ -1,30 +1,34 @@
 from abc import ABC, abstractmethod
 
-class Piece(ABC):
+class Check():
     # takes a board object b and a color c (W/B), and returns if king of color c is under check in board b
-    def check(self, b, c):
+    def check(self, b):
+        c=""
         board = b.board
         ans = False
         for i in range(0, 8):
             for j in range(0, 8):
                 piece = board[i][j]
-                if type(piece)==type("") and not piece.startswith(c):
-                    d={'N':knight, 'B':bishop, 'P':pawn, 'R':rook, 'Q':queen, 'K':king}
+                if type(piece)==type(""):
+                    d={'N':knight(), 'B':bishop(), 'P':pawn(), 'R':rook(), 'Q':queen(), 'K':king()}
                     piece_type = d[piece[1]]
                     piece_color = piece[0]
-                    legal_moves = piece_type().set_legal_moves(i, j, b, piece_color)
+                    legal_moves = piece_type.set_legal_moves(i, j, b, piece_color)
                     for move in legal_moves:
                         row, col = move[0], move[1]
                         target = board[row][col]
-                        if type(target)==type("") and target[0]==c and target[1]=='K':
+                        if type(target)==type("") and target[0]!=piece_color and target[1]=='K':
                             ans = True 
+                            c=target[0]
                             break 
                     if ans:
                         break 
             if ans:
                 break
-        return ans
+        return ans,target
 
+class Piece(ABC):
+    
     @abstractmethod
     def set_legal_moves(i,j):
         pass
@@ -38,7 +42,7 @@ class knight(Piece):
         for index in li:
             if index[0]>7 or index[0]<0 or index[1]>7 or index[1]<0:
                 continue
-            if board[index[0]][index[1]]!=0 and board[index[0]][index[1]].startswith(color):
+            if board[index[0]][index[1]]!=0 and str(board[index[0]][index[1]]).startswith(color):
                 continue
             moves.append(index)
         return moves
@@ -162,6 +166,6 @@ class king(Piece):
         legal_moves=[]
         for move in moves:
             row, col = move[0], move[1]
-            if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not board[row][col].startswith(color)):
+            if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not str(board[row][col]).startswith(color)):
                 legal_moves.append(move)
         return legal_moves

@@ -52,6 +52,7 @@ while running:
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
                 reset_board()
+                print("Check:",Check().check(b))
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
@@ -59,6 +60,7 @@ while running:
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
                 reset_board()
+                print("Check:",Check().check(b))
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if b.board[i][j]==0:
