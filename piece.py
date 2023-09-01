@@ -1,13 +1,11 @@
 from abc import ABC, abstractmethod
 
 class Check():
-    def __init__(self):
-        self.running=False
+    
+        
     # takes a board object b and a color c (W/B), and returns if king of color c is under check in board b
     def check(self, b):
-        if self.running:
-            return
-        self.running=True
+        
         c=""
         board = b.board
         ans = False
@@ -30,7 +28,7 @@ class Check():
                         break 
             if ans:
                 break
-        self.running=False
+        
         return ans,target
 
 class Piece(ABC):
@@ -41,12 +39,10 @@ class Piece(ABC):
 
 # color should be B or W
 class knight(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         li=[[i+2,j-1],[i-2,j-1],[i-1,j-2],[i+1,j-2],[i+2,j+1],[i-2,j+1],[i-1,j+2],[i+1,j+2]]  
         moves=[]
@@ -56,16 +52,14 @@ class knight(Piece):
             if board[index[0]][index[1]]!=0 and str(board[index[0]][index[1]]).startswith(color):
                 continue
             moves.append(index)
-        self.running=False
+        
         return moves
       
 class bishop(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         moves=[]
         # top left diagonal
@@ -104,16 +98,14 @@ class bishop(Piece):
         else:
             if a<8 and b<8 and type(board[a][b])==type("") and not board[a][b].startswith(color):
                 moves.append([a,b])
-        self.running=False
+        
         return moves
     
 class pawn(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         moves=[]
         if color==b.color:
@@ -136,16 +128,14 @@ class pawn(Piece):
                     moves.append([i+1, j-1])
                 if j+1<8 and type(board[i+1][j+1])==type("") and not board[i+1][j+1].startswith(color):
                     moves.append([i+1, j+1])      
-        self.running=False
+        
         return moves
     
 class rook(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         moves=[]
         # above
@@ -180,28 +170,24 @@ class rook(Piece):
         else:
             if b<8 and type(board[a][b])==type("") and not board[a][b].startswith(color):
                 moves.append([a,b])
-        self.running=False
+        
         return moves
     
 class queen(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         moves=bishop().set_legal_moves(i,j,b,color)+rook().set_legal_moves(i,j,b,color)
-        self.running=False
+        
         return moves
 
 class king(Piece):
-    def __init__(self):
-        self.running=False
+    
+        
     def set_legal_moves(self, i, j, b, color):
-        if self.running:
-            return
-        self.running=True
+        
         board=b.board
         moves=[[i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1], [i-1, j-1]]
         legal_moves=[]
@@ -209,7 +195,7 @@ class king(Piece):
             row, col = move[0], move[1]
             if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not str(board[row][col]).startswith(color)):
                 legal_moves.append(move)
-        self.running=False
+        
         return legal_moves
 class Pin():
     def pin(self, piece, b, i, j , moves):
