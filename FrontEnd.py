@@ -48,6 +48,12 @@ while running:
             j=int(pos[0]/60)
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
+                if piece_selected.endswith('P') :
+                    # print("Entered if")
+                    # print(f"{piece_selected} and {i}")
+                    if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
+                        piece=input("Enter what piece you want to promote to:")
+                        piece_selected=(piece_selected[0]+piece).upper()
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
@@ -65,6 +71,12 @@ while running:
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
+                if piece_selected.endswith('P') :
+                    # print("Entered if")
+                    # print(f"{piece_selected} and {i}")
+                    if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
+                        piece=input("Enter what piece you want to promote to:")
+                        piece_selected=(piece_selected[0]+piece).upper()
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
