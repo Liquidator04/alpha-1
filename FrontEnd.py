@@ -1,9 +1,13 @@
 import pygame
 from board import board
 from piece import *
+from tile import Squares
 # FRONT END FILE
-b=board("W")
+color="W"
+b=board(color)
 board=[]
+
+Game=[]
 # print(b.board)
 # pygame setup
 pygame.init()
@@ -56,18 +60,27 @@ while running:
                         piece_selected=(piece_selected[0]+piece).upper()
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
+                if piece_selected[1]=='P':
+                    notation=Squares(color).Tiles[i][j]
+                else:
+                    notation=piece_selected[1]+Squares(color).Tiles[i][j]
+                
                 TurnChecker*=-1
                 reset_board()
                 var = Check().check_mate(b)
                 if var[0]:
+                    notation+="#"
+                    Game.append(notation)
+                    print(Game)
                     if var[1].startswith('W'):
                         print("Black has won!! White has been checkmated!")
                     else:
                         print("White has won!! Black has been checkmated!")
                     break
-                else:
-                    print("Checkmate has not been found yet")
-                print("Check:",Check().check(b))
+                if Check().check(b)[0]:
+                    notation+="+"
+                Game.append(notation)
+                print(Game)
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
@@ -79,16 +92,26 @@ while running:
                         piece_selected=(piece_selected[0]+piece).upper()
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
+                if piece_selected[1]=='P':
+                    notation=Squares(color).Tiles[piece_selected_location[0]][piece_selected_location[1]][0]+"x"+Squares(color).Tiles[i][j]
+                else:
+                    notation=piece_selected[1]+"x"+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
                 var = Check().check_mate(b)
                 if var[0]:
+                    notation+="#"
+                    Game.append(notation)
+                    print(Game)
                     if var[1].startswith('W'):
                         print("Black has won!! White has been checkmated!")
                     else:
                         print("White has won!! Black has been checkmated!")
                     break
-                print("Check:",Check().check(b))
+                if Check().check(b)[0]:
+                    notation+="+"
+                Game.append(notation)
+                print(Game)
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if b.board[i][j]==0:
