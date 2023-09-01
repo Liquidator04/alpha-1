@@ -72,72 +72,84 @@ while running:
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=knight().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BN' and TurnChecker==-1:
                 piece_selected='BN'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=knight().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='WB' and TurnChecker==1:
                 piece_selected='WB'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=bishop().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BB' and TurnChecker==-1:
                 piece_selected='BB'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=bishop().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='WP' and TurnChecker==1:
                 piece_selected='WP'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=pawn().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BP' and TurnChecker==-1:
                 piece_selected='BP'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=pawn().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='WR' and TurnChecker==1:
                 piece_selected='WR'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=rook().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BR' and TurnChecker==-1:
                 piece_selected='BR'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=rook().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='WQ' and TurnChecker==1:
                 piece_selected='WQ'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=queen().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BQ' and TurnChecker==-1:
                 piece_selected='BQ'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=queen().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='WK' and TurnChecker==1:
                 piece_selected='WK'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=king().set_legal_moves(i,j,b,'W')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
             if b.board[i][j]=='BK' and TurnChecker==-1:
                 piece_selected='BK'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=king().set_legal_moves(i,j,b,'B')
+                moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
 
     # fill the screen with a color to wipe away anything from last frame
