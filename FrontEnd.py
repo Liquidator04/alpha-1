@@ -52,6 +52,15 @@ while running:
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
                 reset_board()
+                var = Check().check_mate(b)
+                if var[0]:
+                    if var[1].startswith('W'):
+                        print("Black has won!! White has been checkmated!")
+                    else:
+                        print("White has won!! Black has been checkmated!")
+                    break
+                else:
+                    print("Checkmate has not been found yet")
                 print("Check:",Check().check(b))
                 piece_selected=''
                 piece_selected_location=(-1,-1)
@@ -60,6 +69,13 @@ while running:
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 TurnChecker*=-1
                 reset_board()
+                var = Check().check_mate(b)
+                if var[0]:
+                    if var[1].startswith('W'):
+                        print("Black has won!! White has been checkmated!")
+                    else:
+                        print("White has won!! Black has been checkmated!")
+                    break
                 print("Check:",Check().check(b))
                 piece_selected=''
                 piece_selected_location=(-1,-1)
