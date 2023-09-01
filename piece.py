@@ -28,6 +28,32 @@ class Check():
         
         return ans,target
 
+    def check_mate(self, b):
+        board=b.board
+        variable = self.check(b)
+        if variable[0]:
+            for i in range(0, 8):
+                for j in range(0, 8):
+                    piece = board[i][j]
+                    if type(piece)==type("") and piece[0]==variable[1][0]:
+                        d={'N':knight(), 'B':bishop(), 'P':pawn(), 'R':rook(), 'Q':queen(), 'K':king()}
+                        piece_type = d[piece[1]]
+                        piece_color = piece[0]
+                        moves = piece_type.set_legal_moves(i, j, b, piece_color)
+                        for move in moves:
+                            temp=b.board[move[0]][move[1]]
+                            b.board[move[0]][move[1]]=piece
+                            b.board[i][j]=0
+                            var = self.check(b)
+                            if not(var[0] and var[1].startswith(piece[0])):
+                                b.board[move[0]][move[1]]=temp
+                                b.board[i][j]=piece
+                                return False,""
+                            b.board[move[0]][move[1]]=temp
+                            b.board[i][j]=piece
+            return True,variable[1]
+        return False,""
+            
 class Piece(ABC):
     
     @abstractmethod
