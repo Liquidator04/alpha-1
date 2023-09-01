@@ -3,10 +3,8 @@ from abc import ABC, abstractmethod
 class Check():
     
         
-    # takes a board object b and a color c (W/B), and returns if king of color c is under check in board b
+    # takes a board object b and returns if a king is under check (ans=True/False) and the king which is under check (target="WK"/"BK")
     def check(self, b):
-        
-        c=""
         board = b.board
         ans = False
         for i in range(0, 8):
@@ -22,7 +20,6 @@ class Check():
                         target = board[row][col]
                         if type(target)==type("") and target[0]!=piece_color and target[1]=='K':
                             ans = True 
-                            c=target[0]
                             break 
                     if ans:
                         break 
@@ -197,6 +194,7 @@ class king(Piece):
                 legal_moves.append(move)
         
         return legal_moves
+
 class Pin():
     def pin(self, piece, b, i, j , moves):
         legal_moves=[]
@@ -204,15 +202,9 @@ class Pin():
             temp=b.board[move[0]][move[1]]
             b.board[move[0]][move[1]]=piece
             b.board[i][j]=0
-            # for row in b.board:
-            #     print(row)
-            # print("New Check")
             var=Check().check(b)
-            if var[0] and var[1].startswith(piece[0]):
-                b.board[move[0]][move[1]]=temp
-                b.board[i][j]=piece
-                continue
-            legal_moves.append(move)
+            if not(var[0] and var[1].startswith(piece[0])):
+                legal_moves.append(move)
             b.board[move[0]][move[1]]=temp
             b.board[i][j]=piece
         return legal_moves
