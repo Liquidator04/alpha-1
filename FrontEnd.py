@@ -53,18 +53,22 @@ while running:
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
                 if piece_selected.endswith('P') :
+                    promotion=False
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
+                        promotion=True
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 if piece_selected[1]=='P':
                     notation=Squares(color).Tiles[i][j]
                 else:
-                    notation=piece_selected[1]+Squares(color).Tiles[i][j]
-                
+                    if promotion:
+                        notation=Squares(color).Tiles[i][j]+"="+piece_selected[1]
+                    else:
+                        notation=piece_selected[1]+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
                 var = Check().check_mate(b)
@@ -84,18 +88,23 @@ while running:
                 piece_selected=''
                 piece_selected_location=(-1,-1)
             if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
+                promotion=False
                 if piece_selected.endswith('P') :
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
+                        promotion=True
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 if piece_selected[1]=='P':
                     notation=Squares(color).Tiles[piece_selected_location[0]][piece_selected_location[1]][0]+"x"+Squares(color).Tiles[i][j]
                 else:
-                    notation=piece_selected[1]+"x"+Squares(color).Tiles[i][j]
+                    if promotion:
+                        notation=Squares(color).Tiles[i][j]+"="+piece_selected[1]
+                    else:
+                        notation=piece_selected[1]+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
                 var = Check().check_mate(b)
