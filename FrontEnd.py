@@ -52,8 +52,8 @@ while running:
             j=int(pos[0]/60)
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
+                promotion=False
                 if piece_selected.endswith('P') :
-                    promotion=False
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
