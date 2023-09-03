@@ -28,6 +28,32 @@ class Check():
         
         return ans,target
 
+    # takes a board object b and color c (W/B) and returns if the king of color c is under check in board b (True/False)
+    def check2(self, b, c):
+        board = b.board
+        ans = False
+        for i in range(0, 8):
+            for j in range(0, 8):
+                piece = board[i][j]
+                if type(piece)==type(""):
+                    d={'N':knight(), 'B':bishop(), 'P':pawn(), 'R':rook(), 'Q':queen(), 'K':king()}
+                    piece_type = d[piece[1]]
+                    piece_color = piece[0]
+                    if piece_color != c:
+                        legal_moves = piece_type.set_legal_moves(i, j, b, piece_color)
+                        for move in legal_moves:
+                            row, col = move[0], move[1]
+                            target = board[row][col]
+                            if type(target)==type("") and target[0]!=piece_color and target[1]=='K':
+                                ans = True 
+                                break 
+                        if ans:
+                            break 
+            if ans:
+                break
+        
+        return ans
+
     def check_mate(self, b):
         board=b.board
         variable = self.check(b)
@@ -44,13 +70,11 @@ class Check():
                             temp=b.board[move[0]][move[1]]
                             b.board[move[0]][move[1]]=piece
                             b.board[i][j]=0
-                            var = self.check(b)
-                            if not(var[0] and var[1].startswith(piece[0])):
-                                b.board[move[0]][move[1]]=temp
-                                b.board[i][j]=piece
-                                return False,""
+                            var = self.check2(b, piece_color)
                             b.board[move[0]][move[1]]=temp
                             b.board[i][j]=piece
+                            if not var:
+                                return False,""
             return True,variable[1]
         return False,""
             
@@ -65,7 +89,6 @@ class knight(Piece):
     
         
     def set_legal_moves(self, i, j, b, color):
-        
         board=b.board
         li=[[i+2,j-1],[i-2,j-1],[i-1,j-2],[i+1,j-2],[i+2,j+1],[i-2,j+1],[i-1,j+2],[i+1,j+2]]  
         moves=[]
@@ -222,14 +245,16 @@ class king(Piece):
         return legal_moves
 
 class Pin():
+    # takes a piece (like 'WB'), it's position (i,j), it's possible moves, and returns only those moves 
+    # which don't cause it's own king to fall under check
     def pin(self, piece, b, i, j , moves):
         legal_moves=[]
         for move in moves:
             temp=b.board[move[0]][move[1]]
             b.board[move[0]][move[1]]=piece
             b.board[i][j]=0
-            var=Check().check(b)
-            if not(var[0] and var[1].startswith(piece[0])):
+            var=Check().check2(b, piece[0])
+            if not var:
                 legal_moves.append(move)
             b.board[move[0]][move[1]]=temp
             b.board[i][j]=piece

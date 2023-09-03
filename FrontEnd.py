@@ -3,7 +3,7 @@ from board import board
 from piece import *
 from tile import Squares
 # FRONT END FILE
-color="W"
+color="B"
 b=board(color)
 board=[]
 
@@ -53,10 +53,10 @@ while running:
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
                 promotion=False
-                if piece_selected.endswith('P') :
-                    # print("Entered if")
-                    # print(f"{piece_selected} and {i}")
-                    if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
+                if piece_selected[1]=='P' :
+                    print("Entered if")
+                    print(f"{piece_selected} and {color} and {i}")
+                    if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
                         promotion=True
@@ -92,7 +92,7 @@ while running:
                 if piece_selected.endswith('P') :
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
-                    if ((piece_selected.startswith('W') and i==0) or (piece_selected.startswith('B') and i==7)):
+                    if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
                         promotion=True
@@ -102,9 +102,9 @@ while running:
                     notation=Squares(color).Tiles[piece_selected_location[0]][piece_selected_location[1]][0]+"x"+Squares(color).Tiles[i][j]
                 else:
                     if promotion:
-                        notation=Squares(color).Tiles[i][j]+"="+piece_selected[1]
+                        notation=Squares(color).Tiles[piece_selected_location[0]][piece_selected_location[1]][0]+"x"+Squares(color).Tiles[i][j]+"="+piece_selected[1]
                     else:
-                        notation=piece_selected[1]+Squares(color).Tiles[i][j]
+                        notation=piece_selected[1]+"x"+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
                 var = Check().check_mate(b)
