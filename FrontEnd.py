@@ -3,7 +3,7 @@ from board import board
 from piece import *
 from tile import Squares
 # FRONT END FILE
-color="B"
+color="W"
 b=board(color)
 board=[]
 
@@ -38,6 +38,13 @@ def reset_board():
             if type(b.board[i][j])==type("") and b.board[i][j].endswith('1'):
                 b.board[i][j]=b.board[i][j][:-1]
 
+# removes the trailing e (which represents that a pawn can be en-passant-ed) from all pawns which are NOT color c (W/B)
+def removeEnPassant(c):
+    for i in range(0,8):
+        for j in range(0,8):
+            if type(b.board[i][j])==type("") and b.board[i][j][0]!=c and b.board[i][j][1:]=='P'+'e':
+                b.board[i][j]=b.board[i][j][:-1]
+
 piece_selected=''
 piece_selected_location=(-1,-1)
 while running:
@@ -53,17 +60,26 @@ while running:
             # print(f"i={i}, j={j}")
             if b.board[i][j]==1:
                 promotion=False
+                en_passant_capture=False
                 if piece_selected[1]=='P' :
-                    print("Entered if")
-                    print(f"{piece_selected} and {color} and {i}")
+                    # print("Entered if")
+                    # print(f"{piece_selected} and {color} and {i}")
                     if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
                         promotion=True
+                    elif ((piece_selected.startswith('W') and ((color=='W' and i==4 and piece_selected_location[0]==6) or (color=='B' and i==3 and piece_selected_location[0]==1))) or (piece_selected.startswith('B') and ((color=='W' and i==3 and piece_selected_location[0]==1) or (color=='B' and i==4 and piece_selected_location[0]==6)))):
+                        piece_selected+="e"     # represents that this pawn can be captured by en-passant
+                    elif j != piece_selected_location[1]:   # pawn is moving to another file without doing captures
+                        b.board[piece_selected_location[0]][j]=0    # removing the en-passant-ed pawn
+                        en_passant_capture=True
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 if piece_selected[1]=='P':
-                    notation=Squares(color).Tiles[i][j]
+                    if not en_passant_capture:
+                        notation=Squares(color).Tiles[i][j]
+                    else:
+                        notation=Squares(color).Tiles[piece_selected_location[0]][piece_selected_location[1]][0]+'x'+Squares(color).Tiles[i][j]+"e.p."
                 else:
                     if promotion:
                         notation=Squares(color).Tiles[i][j]+"="+piece_selected[1]
@@ -71,6 +87,7 @@ while running:
                         notation=piece_selected[1]+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
+                removeEnPassant(piece_selected[0])
                 var = Check().check_mate(b)
                 if var[0]:
                     notation+="#"
@@ -107,6 +124,7 @@ while running:
                         notation=piece_selected[1]+"x"+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
                 reset_board()
+                removeEnPassant(piece_selected[0])
                 var = Check().check_mate(b)
                 if var[0]:
                     notation+="#"

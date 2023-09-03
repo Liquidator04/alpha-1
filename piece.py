@@ -84,7 +84,7 @@ class Piece(ABC):
     def set_legal_moves(i,j):
         pass
 
-# color should be B or W
+# color should be B or W (it is the color of the piece selected)
 class knight(Piece):
     
         
@@ -164,6 +164,11 @@ class pawn(Piece):
                     moves.append([i-1, j-1])
                 if j+1<8 and type(board[i-1][j+1])==type("") and not board[i-1][j+1].startswith(color):
                     moves.append([i-1, j+1])
+                if i==3:
+                    if j>=1 and type(board[i][j-1])==type("") and not board[i][j-1].startswith(color) and board[i][j-1][1:]=='Pe':
+                        moves.append([i-1, j-1])    # left en-passant
+                    if j<=6 and type(board[i][j+1])==type("") and not board[i][j+1].startswith(color) and board[i][j+1][1:]=='Pe':
+                        moves.append([i-1, j+1])    # right en-passant
         else:
             if i+1<8:
                 if board[i+1][j]==0:
@@ -173,7 +178,12 @@ class pawn(Piece):
                 if j-1>=0 and type(board[i+1][j-1])==type("") and not board[i+1][j-1].startswith(color):
                     moves.append([i+1, j-1])
                 if j+1<8 and type(board[i+1][j+1])==type("") and not board[i+1][j+1].startswith(color):
-                    moves.append([i+1, j+1])      
+                    moves.append([i+1, j+1])    
+                if i==4:
+                    if j>=1 and type(board[i][j-1])==type("") and not board[i][j-1].startswith(color) and board[i][j-1][1:]=='Pe':
+                        moves.append([i+1, j-1])    # left en-passant
+                    if j<=6 and type(board[i][j+1])==type("") and not board[i][j+1].startswith(color) and board[i][j+1][1:]=='Pe':
+                        moves.append([i+1, j+1])    # right en-passant  
         
         return moves
     
