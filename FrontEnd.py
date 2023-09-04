@@ -61,6 +61,7 @@ while running:
             if b.board[i][j]==1:
                 promotion=False
                 en_passant_capture=False
+                castling=False
                 if piece_selected[1]=='P' :
                     # print("Entered if")
                     # print(f"{piece_selected} and {color} and {i}")
@@ -73,6 +74,15 @@ while running:
                     elif j != piece_selected_location[1]:   # pawn is moving to another file without doing captures
                         b.board[piece_selected_location[0]][j]=0    # removing the en-passant-ed pawn
                         en_passant_capture=True
+                elif piece_selected[1] in ('R', 'K'):
+                    piece_selected+='m'     # represents that piece has been moved and can't be castled anymore
+                if piece_selected[1]=='K':
+                    if (j-piece_selected_location[1])==-2:  # queen side castling
+                        b.board[i][0], b.board[i][3] = b.board[i][3], b.board[i][0]+'m'
+                        castling="queen side"
+                    elif (j-piece_selected_location[1])==2:  # king side castling
+                        b.board[i][5], b.board[i][7] = b.board[i][7]+'m', b.board[i][5]
+                        castling="king side"
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 if piece_selected[1]=='P':
@@ -83,6 +93,10 @@ while running:
                 else:
                     if promotion:
                         notation=Squares(color).Tiles[i][j]+"="+piece_selected[1]
+                    elif castling=="queen side":
+                        notation="O-O-O"
+                    elif castling=="king side":
+                        notation="O-O"
                     else:
                         notation=piece_selected[1]+Squares(color).Tiles[i][j]
                 TurnChecker*=-1
@@ -104,15 +118,17 @@ while running:
                 print(Game)
                 piece_selected=''
                 piece_selected_location=(-1,-1)
-            if type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
+            elif type(b.board[i][j])==type("") and b.board[i][j].endswith("1"):
                 promotion=False
-                if piece_selected.endswith('P') :
+                if piece_selected[1]=='P' :
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
                         piece=input("Enter what piece you want to promote to:")
                         piece_selected=(piece_selected[0]+piece).upper()
                         promotion=True
+                elif piece_selected[1] in ('R', 'K'):
+                    piece_selected+='m'     # represents that piece has been moved and can't be castled anymore
                 b.board[i][j]=piece_selected
                 b.board[piece_selected_location[0]][piece_selected_location[1]]=0
                 if piece_selected[1]=='P':
@@ -141,89 +157,89 @@ while running:
                 print(Game)
                 piece_selected=''
                 piece_selected_location=(-1,-1)
-            if b.board[i][j]==0:
+            elif b.board[i][j]==0:
                 reset_board()
                 piece_selected=''
                 piece_selected_location=(-1,-1)
-            if b.board[i][j]=='WN' and TurnChecker==1:
+            elif b.board[i][j]=='WN' and TurnChecker==1:
                 piece_selected='WN'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=knight().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BN' and TurnChecker==-1:
+            elif b.board[i][j]=='BN' and TurnChecker==-1:
                 piece_selected='BN'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=knight().set_legal_moves(i,j,b,'B')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='WB' and TurnChecker==1:
+            elif b.board[i][j]=='WB' and TurnChecker==1:
                 piece_selected='WB'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=bishop().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BB' and TurnChecker==-1:
+            elif b.board[i][j]=='BB' and TurnChecker==-1:
                 piece_selected='BB'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=bishop().set_legal_moves(i,j,b,'B')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='WP' and TurnChecker==1:
+            elif b.board[i][j]=='WP' and TurnChecker==1:
                 piece_selected='WP'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=pawn().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BP' and TurnChecker==-1:
+            elif b.board[i][j]=='BP' and TurnChecker==-1:
                 piece_selected='BP'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=pawn().set_legal_moves(i,j,b,'B')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='WR' and TurnChecker==1:
-                piece_selected='WR'
+            elif b.board[i][j].startswith('WR') and TurnChecker==1:
+                piece_selected=b.board[i][j]
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=rook().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BR' and TurnChecker==-1:
-                piece_selected='BR'
+            elif b.board[i][j].startswith('BR') and TurnChecker==-1:
+                piece_selected=b.board[i][j]
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=rook().set_legal_moves(i,j,b,'B')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='WQ' and TurnChecker==1:
+            elif b.board[i][j]=='WQ' and TurnChecker==1:
                 piece_selected='WQ'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=queen().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BQ' and TurnChecker==-1:
+            elif b.board[i][j]=='BQ' and TurnChecker==-1:
                 piece_selected='BQ'
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=queen().set_legal_moves(i,j,b,'B')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='WK' and TurnChecker==1:
-                piece_selected='WK'
+            elif b.board[i][j].startswith('WK') and TurnChecker==1:
+                piece_selected=b.board[i][j]
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=king().set_legal_moves(i,j,b,'W')
                 moves=Pin().pin(piece_selected,b,i,j,moves)
                 update_board(moves)
-            if b.board[i][j]=='BK' and TurnChecker==-1:
-                piece_selected='BK'
+            elif b.board[i][j].startswith('BK') and TurnChecker==-1:
+                piece_selected=b.board[i][j]
                 piece_selected_location=(i,j)
                 reset_board()
                 moves=king().set_legal_moves(i,j,b,'B')

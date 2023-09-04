@@ -40,7 +40,10 @@ class Check():
                     piece_type = d[piece[1]]
                     piece_color = piece[0]
                     if piece_color != c:
-                        legal_moves = piece_type.set_legal_moves(i, j, b, piece_color)
+                        if type(piece_type) != type(king()):
+                            legal_moves = piece_type.set_legal_moves(i, j, b, piece_color)
+                        else:
+                            legal_moves = piece_type.set_legal_moves2(i, j, b, piece_color)
                         for move in legal_moves:
                             row, col = move[0], move[1]
                             target = board[row][col]
@@ -252,6 +255,34 @@ class king(Piece):
             if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not str(board[row][col]).startswith(color)):
                 legal_moves.append(move)
         
+        # castling
+        king=board[i][j]
+        if not king.endswith('m'):  # king has not been moved
+            # queen side castling
+            if board[i][0]==color+'R' and board[i][1]==board[i][2]==board[i][3]==0 and not Check().check2(b, color):
+                board[i][3], board[i][4] = king, 0
+                if not Check().check2(b, color):
+                    legal_moves.append([i, 2])
+                board[i][3], board[i][4] = 0, king
+            # king side castling
+            if board[i][7]==color+'R' and board[i][6]==board[i][5]==0 and not Check().check2(b, color):
+                board[i][4], board[i][5] = 0, king
+                if not Check().check2(b, color):
+                    legal_moves.append([i, 6])
+                board[i][4], board[i][5] = king, 0
+
+        return legal_moves
+    
+    # a more basic function which only returns the basic moves a king can do (unlike castling)
+    # required to prevent a recursion error in check2() function
+    def set_legal_moves2(self, i, j, b, color):
+        board=b.board
+        moves=[[i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1], [i-1, j-1]]
+        legal_moves=[]
+        for move in moves:
+            row, col = move[0], move[1]
+            if 0<=row<8 and 0<=col<8 and (board[row][col]==0 or not str(board[row][col]).startswith(color)):
+                legal_moves.append(move)
         return legal_moves
 
 class Pin():
