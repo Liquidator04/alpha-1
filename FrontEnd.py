@@ -2,6 +2,7 @@ import pygame
 from board import board
 from piece import *
 from tile import Squares
+from promotion import Promotion
 # FRONT END FILE
 color="W"
 b=board(color)
@@ -66,8 +67,18 @@ while running:
                     # print("Entered if")
                     # print(f"{piece_selected} and {color} and {i}")
                     if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
-                        piece=input("Enter what piece you want to promote to:")
-                        piece_selected=(piece_selected[0]+piece).upper()
+                        piece=""
+                        if piece_selected.startswith('W'):
+                            obj=Promotion("white")
+                            piece=obj.Promotion_game()
+                        else:
+                            obj=Promotion("black")
+                            piece=obj.Promotion_game()
+                        # piece=input("Enter what piece you want to promote to:")
+                        if piece=="knight":
+                            piece_selected=(piece_selected[0]+piece[1]).upper()
+                        else:    
+                            piece_selected=(piece_selected[0]+piece[0]).upper()
                         promotion=True
                     elif ((piece_selected.startswith('W') and ((color=='W' and i==4 and piece_selected_location[0]==6) or (color=='B' and i==3 and piece_selected_location[0]==1))) or (piece_selected.startswith('B') and ((color=='W' and i==3 and piece_selected_location[0]==1) or (color=='B' and i==4 and piece_selected_location[0]==6)))):
                         piece_selected+="e"     # represents that this pawn can be captured by en-passant
@@ -124,8 +135,18 @@ while running:
                     # print("Entered if")
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
-                        piece=input("Enter what piece you want to promote to:")
-                        piece_selected=(piece_selected[0]+piece).upper()
+                        piece=""
+                        if piece_selected.startswith('W'):
+                            obj=Promotion("white")
+                            piece=obj.Promotion_game()
+                        else:
+                            obj=Promotion("black")
+                            piece=obj.Promotion_game()
+                        # piece=input("Enter what piece you want to promote to:")
+                        if piece=="knight":
+                            piece_selected=(piece_selected[0]+piece[1]).upper()
+                        else:    
+                            piece_selected=(piece_selected[0]+piece[0]).upper()
                         promotion=True
                 elif piece_selected[1] in ('R', 'K'):
                     piece_selected+='m'     # represents that piece has been moved and can't be castled anymore
@@ -248,8 +269,8 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
-
     # RENDER YOUR GAME HERE
+    screen = pygame.display.set_mode((480, 480))
     k=1
     for i in range(0,8):
         li=[]
