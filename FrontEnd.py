@@ -136,13 +136,13 @@ while running:
                     # print(f"{piece_selected} and {i}")
                     if ((piece_selected.startswith('W') and ((color=='W' and i==0) or (color=='B' and i==7))) or (piece_selected.startswith('B') and ((color=='W' and i==7) or (color=='B' and i==0)))):
                         piece=""
-                        if piece_selected.startswith('W'):
-                            obj=Promotion("white")
-                            piece=obj.Promotion_game()
-                        else:
-                            obj=Promotion("black")
-                            piece=obj.Promotion_game()
-                        # piece=input("Enter what piece you want to promote to:")
+                        # if piece_selected.startswith('W'):
+                        #     obj=Promotion("white")
+                        #     piece=obj.Promotion_game()
+                        # else:
+                        #     obj=Promotion("black")
+                        #     piece=obj.Promotion_game()
+                        piece=input("Enter what piece you want to promote to:")
                         if piece=="knight":
                             piece_selected=(piece_selected[0]+piece[1]).upper()
                         else:    
